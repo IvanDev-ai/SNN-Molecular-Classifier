@@ -1,189 +1,151 @@
-# 🧠 Spikes Before Attention
+# Spikes Before Attention
+
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
-[![Deep Learning](https://img.shields.io/badge/Framework-PyTorch%20%2F%20snntorch-orange.svg)]()
+[![Deep Learning](https://img.shields.io/badge/Framework-TensorFlow%20%2F%20Keras-orange.svg)]()
 [![License](https://img.shields.io/badge/License-MIT-green.svg)]()
-[![Academic](https://img.shields.io/badge/Research-HND%20Computing%20%26%20AI-red.svg)]()
-### Evaluating Spiking Neural Networks for Drug–Target Interaction Prediction
+[![Thesis](https://img.shields.io/badge/Bachelor%20Thesis-PHE%20Applied%20Computing%20%26%20AI-red.svg)]()
 
-**Bachelor Thesis Project** — PHE Applied Computing & Artificial Intelligence  
+**Evaluating Spiking Neural Networks for Drug–Target Interaction Prediction**
+
+**Bachelor Thesis Project**  
+**Programme:** PHE Applied Computing & Artificial Intelligence  
 **Author:** Iván Lumbreras Martín  
-**Academic Year:** 2024-2025
+**Academic Year:** 2024–2025
 
 ---
 
-## 📌 Overview
+## Abstract
 
-This research project investigates whether **Spiking Neural Networks (SNNs)** can offer a more computationally efficient and biologically plausible alternative to **Transformer architectures** in the critical task of **drug–target interaction prediction** using **SMILES molecular representations**.
-
-In an era where AI is revolutionizing drug discovery, the computational cost of state-of-the-art models has become a major bottleneck. This work directly addresses that challenge by comparing two fundamentally different neural paradigms: the powerful but resource-heavy Transformer and the event-driven, brain-inspired Spiking Neural Network.
-
-**Key takeaway:** SNNs delivered **comparable predictive performance** while training **~50% faster** and consuming dramatically less memory — demonstrating their potential as a sustainable and scalable solution for real-world biomedical AI.
+This thesis investigates whether Spiking Neural Networks (SNNs) can provide a computationally more efficient and biologically plausible alternative to Transformer architectures in the prediction of drug–target interactions from SMILES molecular representations. The research directly addresses the escalating computational costs of state-of-the-art models in drug discovery and evaluates the practical advantages of event-driven neural architectures.
 
 ---
 
-## ❓ Research Question
+## Introduction
 
-> **How can the architecture of a Spiking Neural Network optimize computational efficiency in the prediction of drug–target interactions compared to the Transformer architecture?**
+The rapid advancement of artificial intelligence in recent months has exposed a fundamental limitation of current dominant architectures. The emergence of high-performing Asian models such as DeepSeek and Qwen demonstrated that it is possible to achieve competitive results at a fraction of the cost of Western counterparts. Their significantly lower API pricing triggered immediate declines in the stock values of major technology companies. The underlying reason is architectural: these models employ a sparse, “divide-and-conquer” activation strategy in which only the necessary components of the network are engaged for each inference. This approach mirrors the operational principle of Spiking Neural Networks.
 
-This question guided the entire project and remains at the core of the investigation.
+Traditional Transformer models, by contrast, activate the entire network at every step, resulting in computational and energy costs that increasingly exceed the marginal performance gains they deliver. This thesis examines whether SNNs can mitigate these limitations while maintaining predictive accuracy in a real-world biomedical task.
+
+The central research question guiding the work is:
+
+> How can the architecture of a Spiking Neural Network optimise computational efficiency in the prediction of drug–target interactions compared to the Transformer architecture?
 
 ---
 
-## 📖 Background
+## Background
 
 ### SMILES Representation
-SMILES (Simplified Molecular Input Line Entry System) is the standard textual notation for encoding molecular structures as ASCII strings. It allows complex chemical compounds to be processed by machine learning models similarly to natural language.
 
-**Examples included in the study:**
+SMILES (Simplified Molecular Input Line Entry System) is the de facto textual standard for encoding molecular structures as ASCII strings. These strings enable machine learning models to process chemical compounds in a manner analogous to natural language processing.
+
+Examples used in the study include:
 - Nicotine: `CN1CCC[C@H]1C2=CN=CC=C2`
 - Caffeine: `CN1C=NC2=C1C(=O)N(C(=O)N2C)C`
 
-These strings were converted into numerical features using RDKit for model input.
+The model predicts the pIC50 value (a logarithmic measure of inhibitory potency) from derived molecular descriptors. Accurate pIC50 prediction is particularly valuable because it directly indicates the viability of a candidate molecule early in the drug development pipeline, thereby reducing the need for costly and time-intensive laboratory assays.
 
 ### Transformer Architecture
-Transformers dominate modern AI thanks to their **self-attention mechanism**, which excels at capturing long-range dependencies. They have been highly successful in molecular modeling, but come with significant drawbacks:
-- Extremely high computational and memory requirements
-- Large carbon footprint during training
-- Difficulty deploying in resource-constrained environments
+
+Transformers rely on the self-attention mechanism introduced in the seminal paper “Attention Is All You Need” (Vaswani et al., 2017). This mechanism excels at capturing long-range dependencies in sequential data and has been successfully adapted to molecular modelling, most notably in DNABERT (Ji et al., 2021), a pre-trained bidirectional Transformer for DNA-language tasks. Despite their effectiveness, Transformers incur substantial computational and memory overhead, making deployment in resource-constrained environments challenging.
 
 ### Spiking Neural Networks (SNNs)
-SNNs are the third generation of neural networks. Inspired by biological neurons, they communicate through **discrete spike events** rather than continuous activations.
 
-**Core advantages:**
-- Event-driven computation (only active when needed)
-- Significantly lower energy consumption
-- Greater biological realism
-- Natural suitability for neuromorphic hardware
+Spiking Neural Networks represent the third generation of neural networks. They emulate biological neurons by transmitting information through discrete electrical impulses (“spikes”) rather than continuous activations. A neuron fires only when its membrane potential exceeds a defined threshold, resulting in a binary (0/1) communication pattern.
+
+This event-driven paradigm offers significant advantages in training speed and energy efficiency because only the relevant neurons activate at each step. The approach is supported by key literature, including “Spiking Convolutional Neural Networks for Text Classification” (Lv et al., 2024) and the comprehensive review “Direct training high-performance deep spiking neural networks: a review of theories and methods” (Zhou et al., 2024).
 
 ---
 
-## ⚔️ SNN vs Transformer – Direct Comparison
+## Experimental Comparison
 
-| Feature                      | Spiking Neural Network (SNN)          | Transformer                          |
-|-----------------------------|---------------------------------------|--------------------------------------|
-| Computation Style           | Event-driven, spike-based            | Continuous, attention-based         |
-| Energy Efficiency           | Very high (brain-like)               | High computational demand           |
-| Biological Plausibility     | High                                 | Low                                 |
-| Training Speed (this study) | ~29 seconds                          | ~61 seconds                         |
-| Memory Usage (this study)   | ~4.6 MB                              | ~464 MB                             |
-| Maturity                    | Emerging                             | Mature                              |
-| Suitability for Drug Discovery | Promising for efficiency-critical tasks | Excellent performance, costly      |
+Both architectures were implemented and evaluated under identical conditions (Google Colab environment, same dataset, 20 training epochs, validation split of 0.2).
 
-**Resultados reales del experimento:** La SNN mantuvo un rendimiento predictivo similar al Transformer pero con una reducción drástica en tiempo y memoria.
+| Feature                        | Transformer          | Spiking Neural Network (SNN) | 
+|--------------------------------|----------------------|------------------------------|
+| Training time                  | 60.62 seconds       | 29.14 seconds               | 
+| Memory consumption             | 464.55 MB           | 4.60 MB                     | 
+| Validation loss                | 5.2545              | 1.8311                      | 
+
+The SNN achieved comparable (and in this case superior) predictive performance while requiring dramatically fewer resources.
 
 ---
 
-## 🚀 Opportunities & Impact
+## Opportunities and Impact
 
-This research opens doors to:
-- Accelerating drug discovery pipelines
-- Enabling rapid response to emerging health threats
-- Reducing the environmental impact of AI in pharma
-- Deploying advanced models in low-resource settings (hospitals, startups, edge devices)
-- Exploring hybrid SNN–Transformer architectures
-
----
-
-## 👥 Stakeholders
-
-- **Pharmaceutical companies** – faster and cheaper drug screening
-- **Academic & research institutions** – methodological advancement in neuromorphic AI
-- **Healthcare systems** – more sustainable AI tools
-- **Patients & society** – long-term benefits from faster drug development
+The results open several practical avenues:
+- Deployment in resource-limited environments such as portable diagnostic stations or small laboratories.
+- Acceleration of drug development cycles, particularly in response to emerging health threats.
+- Reduction of the environmental footprint of AI-driven pharmaceutical research.
+- Exploration of hybrid SNN–Transformer architectures for optimal performance-efficiency trade-offs.
 
 ---
 
-## 🔬 Methodology
+## Stakeholders
 
-1. **Data Preparation**  
-   - Downloaded Big Molecules SMILES Dataset (Kaggle)  
-   - Converted SMILES to molecular descriptors using RDKit  
-   - Normalized features with Scikit-learn
-
-2. **Model Implementation**  
-   - Baseline: Transformer model (multi-head attention)  
-   - Proposed: Custom Spiking Neural Network  
-   - Both models trained for 20 epochs with identical data split
-
-3. **Resource Monitoring**  
-   - Real-time tracking of training time and memory usage (psutil)  
-   - Fair comparison under the same hardware (Google Colab)
-
-4. **Evaluation**  
-   - Predictive performance (validation loss)  
-   - Computational efficiency (time + memory)  
-   - Qualitative prediction on unseen SMILES molecules
+- **Academic institutions**: provision of resources, infrastructure and scientific prestige.
+- **Pharmaceutical companies**: translation of research into commercial applications and competitive advantage in R&D.
+- **Academic community**: validation, enrichment and constructive critique through seminars and publications.
+- **General public and patients**: increased legitimacy and long-term societal benefit through faster, more sustainable drug development.
 
 ---
 
-## 📊 Key Results
+## Qualitative Component
 
-- Both models achieved competitive validation loss.
-- **SNN trained in half the time** of the Transformer.
-- **SNN used dramatically less memory** during training.
-- Successful predictions on new molecules (e.g. acetic acid, cyclohexane, and a complex drug-like compound).
+The study incorporated a mixed-methods approach. A questionnaire was administered to 76 respondents, and three semi-structured interviews were conducted with healthcare professionals from Hospital Rey Juan Carlos (Móstoles, Madrid): one named interviewee (Daniel Labella Dios, laboratory technician and medical student with over two years of experience) and two anonymous participants (a nuclear medicine technician and a medical student).
 
-**Conclusión clara:** Las SNNs demuestran ser una alternativa altamente eficiente sin sacrificar precisión.
+All interviewees and the majority of questionnaire respondents agreed that artificial intelligence will be highly valuable in reducing both time and financial investment in drug discovery, especially in the event of future viral outbreaks. However, they expressed caution regarding fully autonomous AI-generated drugs. Respondents supported the use of AI as a decision-support tool while maintaining that medical professionals must retain final responsibility.
 
 ---
 
-## ⚖️ Ethical Considerations & Limitations
+## Reflection and Future Work
 
-- Responsible AI in biomedicine
-- Transparency in methodology and results
-- Awareness of limitations (data quality, model generalizability, hardware constraints)
-- Commitment to open science (code and data openly available)
+This project has underscored that computational efficiency is no longer optional but essential for the responsible application of AI in biomedicine. The integration of quantitative experimental results with qualitative stakeholder insights has provided a comprehensive view of both the technical potential and the practical, ethical boundaries of the technology.
 
----
-
-## 🔮 Future Work
-
-- Integration with neuromorphic hardware
-- Testing on larger and more diverse datasets
-- Development of hybrid SNN-Transformer models
-- Real-world validation with pharmaceutical partners
-- Exploration of energy consumption metrics on physical hardware
+**Proposed future directions include:**
+- Expansion and diversification of the dataset.
+- Validation in real-world environments and pilot studies.
+- Integration with specialised neuromorphic hardware.
+- Strengthening of collaboration with domain professionals.
+- Testing under clinical stress conditions and pandemic-simulation scenarios.
 
 ---
 
-## 🛠️ Tech Stack
+## Technology Stack
 
-- **Python** • **TensorFlow / Keras** • **RDKit** • **NumPy / Pandas** • **Scikit-learn** • **psutil** (resource monitoring)
-
----
-
-## 📂 Repository Contents
-
-- `notebooks/` – Complete reproducible pipeline (4 notebooks)
-- `results/` – All graphs, tables and prediction examples
-- `docs/` – Full thesis PDF (51 pages) and presentation (20 pages)
+- Python
+- TensorFlow / Keras
+- RDKit
+- NumPy / Pandas
+- Scikit-learn
+- psutil (resource monitoring)
 
 ---
 
-## 📄 Academic Output
+## Repository Structure
 
-- Full thesis submitted and defended
-- LaTeX version (Overleaf) prepared for arXiv submission
-- Code and data openly available to promote reproducibility
+- `notebooks/` — Complete reproducible experimental pipeline
+- `results/` — Graphs, tables and prediction outputs
+- `docs/` — Full thesis (31 pages) and final presentation (20 pages)
 
 ---
 
-## 👤 Author
+## Academic Output
+
+- Thesis submitted and defended
+- LaTeX version prepared in Overleaf for potential arXiv submission
+- Code and data released openly to ensure reproducibility
+
+---
+
+## Author
 
 **Iván Lumbreras Martín**  
-Computer Science Graduate | Aspiring Junior Data Scientist / ML Engineer  
-C1 English • International experience (Belgium)  
-**Actively seeking** Junior Data Scientist, ML Engineer or Quantitative roles in Fintech / HealthTech.
+Computer Science Graduate  
+Aspiring Junior Data Scientist / ML Engineer  
+C1 English • International experience (Belgium)
 
----
+This thesis constitutes the strongest demonstration in my portfolio of applied artificial intelligence in a high-impact domain. It combines rigorous technical implementation, experimental design and a clear emphasis on efficiency—skills directly transferable to roles in data science, machine learning engineering and quantitative analysis within fintech or healthtech sectors.
 
-**This project represents my strongest demonstration of applied AI in a high-impact domain.**  
-It combines deep technical implementation, rigorous experimental design, and a clear focus on efficiency — skills directly transferable to real-world Data Science and Fintech challenges.
-
-Feel free to explore the code, run the notebooks, or reach out if this work resonates with your team.
-
----
-
-**Made with passion for more efficient, sustainable and biologically inspired AI.**
+The complete code, notebooks and documentation are available in this repository. I welcome any questions or opportunities for collaboration.
 
 *Last updated: April 2026*

@@ -12,6 +12,8 @@
 **Author:** Iván Lumbreras Martín  
 **Academic Year:** 2024–2025
 
+<img width="620" height="724" alt="image" src="https://github.com/user-attachments/assets/eeb28e09-2f32-432b-aff6-0c9ae04e836d" />
+
 ---
 
 ## Abstract

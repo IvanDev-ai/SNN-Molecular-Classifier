@@ -7,7 +7,7 @@
 
 **Evaluating Spiking Neural Networks for Drug–Target Interaction Prediction**
 
-**Bachelor Thesis Project**  
+**HND Thesis Project**  
 **Programme:** PHE Applied Computing & Artificial Intelligence  
 **Author:** Iván Lumbreras Martín  
 **Academic Year:** 2024–2025
